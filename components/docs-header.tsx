@@ -15,7 +15,7 @@ export function DocsHeader() {
         <div className="flex items-center gap-6">
           <Link
             href="/"
-            className="text-2xl font-bold bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+            className="overflow-hidden text-primary text-2xl font-bold"
           >
             NEXPAY
           </Link>

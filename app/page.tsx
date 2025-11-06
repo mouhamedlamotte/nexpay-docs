@@ -13,7 +13,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link
             href="/"
-            className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
+            className="overflow-hidden text-primary text-2xl font-bold"
           >
             NEXPAY
           </Link>
@@ -189,9 +189,12 @@ curl -fsSL https://raw.githubusercontent.com/mouhamedlamotte/nexpay/main/install
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
-              <h3 className="text-lg font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                NEXPAY
-              </h3>
+          <Link
+            href="/"
+            className="overflow-hidden text-primary text-2xl font-bold"
+          >
+            NEXPAY
+          </Link>
               <p className="text-sm text-muted-foreground">
                 Passerelle de paiement auto-hébergée pour applications modernes.
               </p>
