@@ -1102,7 +1102,7 @@ echo 'OK';
                 Mouhamed Lamotte
               </a>
             </p>
-            <p className="text-sm text-muted-foreground">Version 2.0 • Dernière mise à jour : Novembre 2025</p>
+            <p className="text-sm text-muted-foreground">Version 1.0 • Dernière mise à jour : Novembre 2025</p>
           </div>
         </section>
       </div>
