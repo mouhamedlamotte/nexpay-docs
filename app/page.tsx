@@ -7,9 +7,9 @@ import { CodeBlock } from "@/components/code-block"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background overflow-hidden">
+    <div className="min-h-screen bg-background overflow-hidden ">
       {/* Header */}
-      <header className="border-b border-border sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
+      <header className="border-b border-border sticky top-0 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 z-50 lg:px-60">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link
             href="/"
@@ -17,16 +17,7 @@ export default function HomePage() {
           >
             NEXPAY
           </Link>
-          <nav className="hidden md:flex items-center gap-6">
-            <a href="/docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Documentation
-            </a>
-            <a
-              href="/docs#dashboard-guide"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Guides
-            </a>
+          <div className="flex items-center gap-3">
             <a
               href="https://github.com/mouhamedlamotte/nexpay"
               target="_blank"
@@ -35,8 +26,6 @@ export default function HomePage() {
             >
               <Github className="h-5 w-5" />
             </a>
-          </nav>
-          <div className="flex items-center gap-3">
               <Button size="sm" className="bg-primary hover:bg-primary/90">
             <Link href="/docs#quick-start">
                 Documentation
@@ -47,12 +36,11 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 md:py-32">
+      <section className="container md:max-w-7xl mx-auto px-4 py-20 md:py-32">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <Badge className="bg-primary/10 text-primary border-primary/20">Beta</Badge>
           <h1 className="text-4xl md:text-6xl font-bold leading-tight">
             Acceptez des Paiements avec{" "}
-            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               NEXPAY
             </span>
           </h1>
@@ -79,7 +67,7 @@ curl -fsSL https://raw.githubusercontent.com/mouhamedlamotte/nexpay/main/install
       </section>
 
       {/* Features Section */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container md:max-w-7xl mx-auto px-4 py-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="p-6 bg-card border-border hover:border-primary/50 transition-all hover:shadow-lg">
             <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
@@ -124,7 +112,7 @@ curl -fsSL https://raw.githubusercontent.com/mouhamedlamotte/nexpay/main/install
       </section>
 
       {/* Quick Start Section */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container md:max-w-7xl mx-auto px-4 py-20">
         <div className="max-w-3xl mx-auto text-center space-y-12">
           <div className="space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold">Démarrage Rapide</h2>
@@ -166,7 +154,7 @@ curl -fsSL https://raw.githubusercontent.com/mouhamedlamotte/nexpay/main/install
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container md:max-w-7xl mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
           <Card className="p-12 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border-primary/20 text-center space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold">Prêt à commencer ?</h2>
@@ -185,7 +173,7 @@ curl -fsSL https://raw.githubusercontent.com/mouhamedlamotte/nexpay/main/install
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-12">
+      <footer className="border-t border-border py-12 lg:px-60">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">

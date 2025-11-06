@@ -13,7 +13,7 @@ export function DocsContent() {
       <div className="space-y-12">
         {/* Hero Section */}
         <section className="space-y-4">
-          <Badge className="bg-primary/10 text-primary border-primary/20">v2.0</Badge>
+          <Badge className="bg-primary/10 text-primary border-primary/20">v1.0</Badge>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
             Documentation NexPay
           </h1>
