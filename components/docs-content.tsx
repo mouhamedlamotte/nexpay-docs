@@ -87,12 +87,57 @@ docker compose -f docker-compose-dev.yml up -d
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Installation en production</h3>
+            <h3 className="text-xl font-semibold">Option A — Image pré-construite (recommandé)</h3>
             <CodeBlock
               language="bash"
-              code={`# Installation en une commande
-curl -fsSL https://raw.githubusercontent.com/mouhamedlamotte/nexpay/main/install.sh | bash -s -- pay.yourdomain.com`}
+              code={`# Télécharger le fichier compose
+curl -O https://raw.githubusercontent.com/mouhamedlamotte/nexpay/main/docker-compose.yml
+
+# Copier et renseigner les variables d'environnement
+cp .env.example .env   # puis éditez .env
+
+# Démarrer
+docker compose up -d
+
+# API sur :9000  •  Dashboard sur :9001`}
             />
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold">Option B — Traefik + SSL automatique</h3>
+            <CodeBlock
+              language="bash"
+              code={`git clone https://github.com/mouhamedlamotte/nexpay.git
+cd nexpay
+cp .env.example .env   # renseignez APP_DOMAIN, LETSENCRYPT_EMAIL, etc.
+
+docker compose -f docker-compose-prod.yml up -d
+
+# https://pay.yourdomain.com`}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold">Option C — Derrière Nginx / Caddy existant</h3>
+            <p className="text-muted-foreground text-sm">
+              Lancez Option A puis pointez votre reverse proxy vers <code className="bg-muted px-1 rounded">localhost:9001</code> (web) et <code className="bg-muted px-1 rounded">localhost:9000</code> (API). Définissez <code className="bg-muted px-1 rounded">CORS_ORIGIN</code> sur l'URL publique du dashboard.
+            </p>
+            <CodeBlock
+              language="nginx"
+              code={`# Exemple Nginx
+server {
+    server_name pay.yourdomain.com;
+    location /api { proxy_pass http://127.0.0.1:9000; }
+    location /    { proxy_pass http://127.0.0.1:9001; }
+}`}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold">Option D — PostgreSQL / Redis externes</h3>
+            <p className="text-muted-foreground text-sm">
+              Supprimez les services <code className="bg-muted px-1 rounded">postgres</code> et <code className="bg-muted px-1 rounded">redis</code> du fichier compose et renseignez <code className="bg-muted px-1 rounded">DATABASE_URL</code> et <code className="bg-muted px-1 rounded">REDIS_URL</code> dans <code className="bg-muted px-1 rounded">.env</code>.
+            </p>
           </div>
         </section>
 
@@ -386,7 +431,7 @@ x-api-key: YOUR_API_KEY`}
     currency: 'XOF',
     metadata: { key: 'value', foo: 'bar' },
     successUrl: 'https://example.com/success',
-    cancelUrl: 'https://example.com/error',
+    failureUrl: 'https://example.com/error',
     provider: 'wave'
   })
 });
@@ -460,7 +505,7 @@ console.log(data);`}
     currency: 'XOF',
     metadata: { key: 'value', foo: 'bar' },
     successUrl: 'https://example.com/success',
-    cancelUrl: 'https://example.com/error'
+    failureUrl: 'https://example.com/error'
   })
 });
 
@@ -537,19 +582,22 @@ console.log(data.data);`}
   <Alert className="bg-secondary/10 border-secondary/20">
     <Info className="h-4 w-4 text-secondary" />
     <AlertDescription className="text-foreground">
-      Cette route garde la requête ouverte jusqu’à 60 secondes. Elle répond dès que le statut n’est plus <code>pending</code>.
+      Cette route garde la requête ouverte jusqu’à <strong>30 secondes</strong> (long-polling). Elle répond immédiatement si le statut est <code>completed</code> ou <code>failed</code>, sinon attend et réessaie toutes les 2 s.
     </AlertDescription>
   </Alert>
 
   <div className="flex items-center gap-2">
-    <Badge className="bg-primary/10 text-primary border-primary/20">GET</Badge>
+    <Badge className="bg-accent/10 text-accent border-accent/20">POST</Badge>
     <code className="text-sm bg-muted px-3 py-1 rounded">/api/v1/payment/session/:sessionId/status</code>
   </div>
 
   <ApiTabs
     request={`const response = await fetch(
-  'https://pay.yourdomain.com/api/v1/payment/session/cmhdpuj6m00069usa10370ldr/status',
-  { headers: { 'x-api-key': 'YOUR_READ_KEY' } }
+  ‘https://pay.yourdomain.com/api/v1/payment/session/cmhdpuj6m00069usa10370ldr/status’,
+  {
+    method: ‘POST’,
+    headers: { ‘x-api-key’: ‘YOUR_READ_KEY’ }
+  }
 );
 
 const data = await response.json();
@@ -558,7 +606,7 @@ console.log(data.data.status);`}
   "statusCode": 200,
   "data": {
     "sessionId": "cmhdpuj6m00069usa10370ldr",
-    "status": "succeeded", // ou "failed" ou "pending"
+    "status": "completed", // ou "failed" ou "pending"
     "amount": 100800,
     "currency": "XOF",
     "provider": { "name": "Wave", "code": "wave" },
@@ -681,14 +729,6 @@ console.log(data.data.status);`}
                 <code className="text-sm text-destructive">payment.failed</code>
                 <p className="text-sm text-muted-foreground mt-2">Paiement échoué</p>
               </Card>
-              <Card className="p-4 bg-card border-border">
-                <code className="text-sm text-accent">payment.pending</code>
-                <p className="text-sm text-muted-foreground mt-2">Paiement en attente</p>
-              </Card>
-              <Card className="p-4 bg-card border-border">
-                <code className="text-sm text-muted-foreground">payment.cancelled</code>
-                <p className="text-sm text-muted-foreground mt-2">Paiement annulé</p>
-              </Card>
             </div>
           </div>
         </section>
@@ -783,7 +823,7 @@ async function createPaymentSession() {
           foo: 'bar'
         },
         successUrl: 'https://example.com/success',
-        cancelUrl: 'https://example.com/error'
+        failureUrl: 'https://example.com/error'
       },
       {
         headers: {
@@ -831,7 +871,7 @@ def create_payment_session():
             "foo": "bar"
         },
         "successUrl": "https://example.com/success",
-        "cancelUrl": "https://example.com/error"
+        "failureUrl": "https://example.com/error"
     }
   
     response = requests.post(
@@ -868,7 +908,7 @@ function createPaymentSession() {
             'foo' => 'bar'
         ],
         'successUrl' => 'https://example.com/success',
-        'cancelUrl' => 'https://example.com/error'
+        'failureUrl' => 'https://example.com/error'
     ];
   
     $ch = curl_init($apiUrl);
