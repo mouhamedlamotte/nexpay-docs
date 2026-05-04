@@ -487,6 +487,13 @@ console.log(data);`}
       <code className="text-sm bg-muted px-3 py-1 rounded">/api/v1/payment/session/initiate</code>
     </div>
 
+    <Alert className="bg-primary/10 border-primary/20">
+      <Info className="h-4 w-4 text-primary" />
+      <AlertDescription className="text-foreground">
+        Le champ <code className="text-sm bg-muted px-1 rounded">items</code> est optionnel. S'il est fourni, le total des items est affiché sur la page checkout. Chaque item peut avoir un <code className="text-sm bg-muted px-1 rounded">taxRate</code> (%) et/ou un <code className="text-sm bg-muted px-1 rounded">discount</code> (montant absolu). Le champ <code className="text-sm bg-muted px-1 rounded">amount</code> reste obligatoire et représente le montant total à encaisser.
+      </AlertDescription>
+    </Alert>
+
     <ApiTabs
       request={`const response = await fetch('https://pay.yourdomain.com/api/v1/payment/session/initiate', {
   method: 'POST',
@@ -505,7 +512,22 @@ console.log(data);`}
     currency: 'XOF',
     metadata: { key: 'value', foo: 'bar' },
     successUrl: 'https://example.com/success',
-    failureUrl: 'https://example.com/error'
+    failureUrl: 'https://example.com/error',
+    // Optionnel — liste des articles pour affichage sur la page checkout
+    items: [
+      {
+        label: 'Abonnement mensuel',
+        unitPrice: 4000,
+        quantity: 1,
+        taxRate: 18,    // 18 % (optionnel)
+        discount: 0     // montant absolu (optionnel)
+      },
+      {
+        label: 'Frais de service',
+        unitPrice: 500,
+        quantity: 2
+      }
+    ]
   })
 });
 
@@ -823,7 +845,11 @@ async function createPaymentSession() {
           foo: 'bar'
         },
         successUrl: 'https://example.com/success',
-        failureUrl: 'https://example.com/error'
+        failureUrl: 'https://example.com/error',
+        items: [
+          { label: 'Abonnement mensuel', unitPrice: 4000, quantity: 1, taxRate: 18 },
+          { label: 'Frais de service', unitPrice: 500, quantity: 2 }
+        ]
       },
       {
         headers: {
@@ -871,9 +897,13 @@ def create_payment_session():
             "foo": "bar"
         },
         "successUrl": "https://example.com/success",
-        "failureUrl": "https://example.com/error"
+        "failureUrl": "https://example.com/error",
+        "items": [
+            {"label": "Abonnement mensuel", "unitPrice": 4000, "quantity": 1, "taxRate": 18},
+            {"label": "Frais de service", "unitPrice": 500, "quantity": 2}
+        ]
     }
-  
+
     response = requests.post(
         f"{NEXPAY_API_URL}/payment/session/initiate",
         json=payload,
@@ -908,7 +938,11 @@ function createPaymentSession() {
             'foo' => 'bar'
         ],
         'successUrl' => 'https://example.com/success',
-        'failureUrl' => 'https://example.com/error'
+        'failureUrl' => 'https://example.com/error',
+        'items' => [
+            ['label' => 'Abonnement mensuel', 'unitPrice' => 4000, 'quantity' => 1, 'taxRate' => 18],
+            ['label' => 'Frais de service', 'unitPrice' => 500, 'quantity' => 2]
+        ]
     ];
   
     $ch = curl_init($apiUrl);

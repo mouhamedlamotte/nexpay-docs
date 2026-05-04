@@ -56,11 +56,17 @@ export default function HomePage() {
               </Button>
             </Link>
           </div>
-          <div className="pt-8">
+          <div className="pt-8 space-y-3 text-left max-w-2xl mx-auto">
             <CodeBlock
               language="bash"
-              code={`# Installation en une commande
-curl -fsSL https://raw.githubusercontent.com/mouhamedlamotte/nexpay/main/install.sh | bash -s -- pay.yourdomain.com`}
+              code={`# 1. Récupérer les fichiers
+git clone https://github.com/mouhamedlamotte/nexpay.git && cd nexpay
+
+# 2. Configurer l'environnement
+cp .env.example .env  # puis éditez .env avec vos clés
+
+# 3. Lancer
+docker compose up -d`}
             />
           </div>
         </div>
